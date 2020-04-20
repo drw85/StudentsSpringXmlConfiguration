@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="groupRepository" class="repositories.InMemoryGroupsRepositoryImpl"/>
+    <bean id="studentRepository" class="repositories.InMemoryStudentsRepositoryImpl"/>
+    <bean id="groupIdGenerator" class="services.GroupIdGeneratorGetNextByIteration">
+        <constructor-arg name="groupRepository" ref="groupRepository"/>
+    </bean>
+    <bean id="studentIdGenerator" class="services.StudentsIdGeneratorGetNextByIteration">
+        <constructor-arg name="studentRepository" ref="studentRepository"/>
+    </bean>
+    <bean id="groupService" class="services.GroupServiceImpl">
+        <constructor-arg name="groupRepository" ref="groupRepository"/>
+        <constructor-arg name="groupIdGenerator" ref="groupIdGenerator"/>
+        <constructor-arg name="studentService" ref="studentService"/>
+    </bean>
+    <bean id="studentService" class="services.StudentServiceImpl">
+        <constructor-arg name="studentIdGenerator" ref="studentIdGenerator"/>
+        <constructor-arg name="studentRepository" ref="studentRepository"/>
+        <constructor-arg name="groupRepository" ref="groupRepository"/>
+    </bean>
+</beans>
